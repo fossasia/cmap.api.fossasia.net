@@ -127,7 +127,7 @@ var FFCommunityMapWidget = function(settings, map_options, link) {
     options.zoom
   );
   
-  var mapboxLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/freienetzwerke.i2lgkb76/{z}/{x}/{y}.png', {
+  var mapboxLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v3/andibraeu.kd6ccoce/{z}/{x}/{y}.png', {
 attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy; Mapbox &copy; OpenStreetMap</a> <a class="mapbox-improve-map" href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a>'
   });
   
