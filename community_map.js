@@ -115,9 +115,9 @@ var FFCommunityMapWidget = function(settings, map_options, link) {
     divId: 'map',
     geoJSONUrl: settings.geoJson || "/map/ffGeoJson.json",
     getPopupHTML: renderPopup,
-    zoom: 5,
+    zoom: 3,
     maxZoom: 8,
-    center: [51.5, 10.5]
+    center: [46.2830,86.6700]
   }, options);
   
   var widget = {};
