@@ -136,17 +136,17 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
   });
   
   //set default layer
-  widget.map.addLayer(mapboxLayer);
+  widget.map.addLayer(osmlayer);
   
   var clusters = L.markerClusterGroup({ 
-    spiderfyOnMaxZoom: false, 
+    spiderfyOnMaxZoom: true, 
     showCoverageOnHover: false, 
     maxClusterRadius: 40 
   }).addTo(widget.map);
   
   if (!settings.hideLocationButton) {
     var locationButton = new L.Control.Button({
-      iconUrl: "./images/location-icon.png",
+      iconUrl: "/map/images/location-icon.png",
       hideText: true,
       doToggle: false,
       onClick: function(e) {
