@@ -144,6 +144,10 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
     maxClusterRadius: 40 
   }).addTo(widget.map);
   
+  //disable srolling
+  if (!settings.scrollByMousewheel) {
+    widget.map.scrollWheelZoom.disable();
+  }
   if (!settings.hideLocationButton) {
     var locationButton = new L.Control.Button({
       iconUrl: "/map/images/location-icon.png",
