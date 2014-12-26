@@ -28,6 +28,10 @@
       <h2><a href="<%- props.url %>" target="_window"><%- props.name %></a></h2>
     <% } %>
     
+    <% if ( props.logo ) { %>
+      <img class="logo" src="<%- props.logo %>" />
+    <% } %>
+    
     <% if (props.metacommunity) { %>
       <h3><%- props.metacommunity %></h3>
     <% } %>
