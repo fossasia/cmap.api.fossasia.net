@@ -37,9 +37,6 @@ html, body, #map {
 .leaflet-control-countries-list label {
   display: block;
 }
-.leaflet-control-countries-list span {
-  font-size: 16px;
-}
 
 .leaflet-filter-control:hover .leaflet-filter-control-toggle { 
   display: none;

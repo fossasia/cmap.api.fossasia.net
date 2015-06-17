@@ -180,31 +180,6 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
     }).addTo(widget.map);
   }
 
-  var countriesList = {'AF' : 'Afganishtan', 'VN' : 'Vietnam', 'CN' : 'China'};
-  var CustomFilterControl = L.Control.extend({
-    options: {
-      position: 'topright'
-    },
-
-     onAdd: function (map) {
-        var container = L.DomUtil.create('div', 'leaflet-filter-control');
-        var selectList = $(container).append('<div class="leaflet-filter-control-toggle"></div><div class="leaflet-control-countries-list">')
-          .find('.leaflet-control-countries-list');
-        for (var key in countriesList) {
-          selectList.append('<label><input type="checkbox" value="' + key + '"><span>' + countriesList[key] + '</span>');
-          selectList.find('input[type="checkbox"]').click(function(e) {
-            var selectedCountries = [];
-            selectList.find('input[type="checkbox"]:checked').each(function(k, v) {
-              selectedCountries.push(v.value);
-            });
-            filterMapByCountries(selectedCountries);
-          })
-        }
-        return container;
-    }
-  });
-  widget.map.addControl(new CustomFilterControl());
-
   function createGeoJSONLayer(geojson, filterFunction) {
     return L.geoJson(geojson, {
       onEachFeature: function(feature, layer) {
@@ -243,6 +218,39 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
 
   $.getJSON(options.geoJSONUrl, function(geojson) {
       savedGeoJson = geojson;
+
+      // extract countries list
+      var countriesList = {};
+      $.each(geojson.features, function(k, v) {
+        var countryCode = v.properties.country;
+        if (countriesList[countryCode] == undefined)
+          countriesList[countryCode] = countryCode; 
+      });
+
+       var CustomFilterControl = L.Control.extend({
+          options: {
+            position: 'topright'
+          },
+           onAdd: function (map) {
+              var container = L.DomUtil.create('div', 'leaflet-filter-control');
+              var selectList = $(container).append('<div class="leaflet-filter-control-toggle"></div><div class="leaflet-control-countries-list">')
+                .find('.leaflet-control-countries-list');
+              for (var key in countriesList) {
+                selectList.append('<label><input type="checkbox" value="' + key + '"><span>' + countriesList[key] + '</span>');
+                selectList.find('input[type="checkbox"]').click(function(e) {
+                  var selectedCountries = [];
+                  selectList.find('input[type="checkbox"]:checked').each(function(k, v) {
+                    selectedCountries.push(v.value);
+                  });
+                  filterMapByCountries(selectedCountries);
+                })
+              }
+              return container;
+          }
+        });
+        widget.map.addControl(new CustomFilterControl());
+
+      // create geojson map layer
       createGeoJSONLayer(savedGeoJson, function(feature, layer) {
         if (feature.geometry.coordinates[0] && feature.geometry.coordinates[1]) {
           return true;
