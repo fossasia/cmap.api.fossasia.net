@@ -16,6 +16,38 @@ html, body, #map {
 	height: 100%;
 	width: 100%;
 }
+
+.leaflet-filter-control {
+  box-shadow: 0 1px 7px rgba(0,0,0,0.4);
+  background: #f8f8f9;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.leaflet-filter-control-toggle {
+  background-image: url(images/layers.png);
+  width: 36px;
+  height: 36px;
+}
+
+.leaflet-control-countries-list {
+  display: none;
+  width: 144px;
+}
+.leaflet-control-countries-list label {
+  display: block;
+}
+.leaflet-control-countries-list span {
+  font-size: 16px;
+}
+
+.leaflet-filter-control:hover .leaflet-filter-control-toggle { 
+  display: none;
+}
+
+.leaflet-filter-control:hover .leaflet-control-countries-list {
+  display: block; 
+}
 /* /Leaflet controls */
 
 

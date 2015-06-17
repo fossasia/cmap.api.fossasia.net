@@ -179,19 +179,38 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
       "OSM": osmlayer
     }).addTo(widget.map);
   }
-  
-  $.getJSON(options.geoJSONUrl, function(geojson) {
-    var geoJsonLayer = L.geoJson(geojson, {
+
+  var countriesList = {'AF' : 'Afganishtan', 'VN' : 'Vietnam', 'CN' : 'China'};
+  var CustomFilterControl = L.Control.extend({
+    options: {
+      position: 'topright'
+    },
+
+     onAdd: function (map) {
+        var container = L.DomUtil.create('div', 'leaflet-filter-control');
+        var selectList = $(container).append('<div class="leaflet-filter-control-toggle"></div><div class="leaflet-control-countries-list">')
+          .find('.leaflet-control-countries-list');
+        for (var key in countriesList) {
+          selectList.append('<label><input type="checkbox" value="' + key + '"><span>' + countriesList[key] + '</span>');
+          selectList.find('input[type="checkbox"]').click(function(e) {
+            var selectedCountries = [];
+            selectList.find('input[type="checkbox"]:checked').each(function(k, v) {
+              selectedCountries.push(v.value);
+            });
+            filterMapByCountries(selectedCountries);
+          })
+        }
+        return container;
+    }
+  });
+  widget.map.addControl(new CustomFilterControl());
+
+  function createGeoJSONLayer(geojson, filterFunction) {
+    return L.geoJson(geojson, {
       onEachFeature: function(feature, layer) {
         layer.bindPopup(options.getPopupHTML(feature.properties), { minWidth: 210 });
       },
-      filter: function(feature, layer) {
-        if (feature.geometry.coordinates[0] && feature.geometry.coordinates[1]) {
-          return true;
-        } else {
-          return false;
-        }
-      },
+      filter: filterFunction,
       pointToLayer: function(feature, latlng) {
         var marker = L.circleMarker(latlng, {
           //title: feature.properties.name,
@@ -206,7 +225,32 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
         });
         return marker;
       }
-    }).addTo(clusters);
+    });
+  }
+
+  var savedGeoJson;
+  function filterMapByCountries(countryCodes) {
+    clusters.clearLayers();
+    createGeoJSONLayer(savedGeoJson, function(feature, layer) {
+      if (feature.geometry.coordinates[0] && feature.geometry.coordinates[1] && countryCodes.indexOf(feature.properties.country) != -1) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .addTo(clusters);
+  }
+
+  $.getJSON(options.geoJSONUrl, function(geojson) {
+      savedGeoJson = geojson;
+      createGeoJSONLayer(savedGeoJson, function(feature, layer) {
+        if (feature.geometry.coordinates[0] && feature.geometry.coordinates[1]) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .addTo(clusters);
     
     //add stats info box
     if (!settings.hideInfoBox) {
