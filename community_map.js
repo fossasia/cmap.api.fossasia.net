@@ -226,11 +226,33 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
     }
   });
   
-  //initialize underscore tamplating
+  //initialize underscore templating
   _.templateSettings.variable = "props";
   widget.communityTemplate = _.template(
     $( "script.template#community-popup" ).html()
   );
   
+  widget.map.on('popupopen', function(e){
+    var url = 'http://localhost/fossasia/feed.api.fossasia.net/feed.php?source='
+        + e.popup._contentNode.getElementsByClassName('community-popup')[0].getAttribute('data-id');
+    console.log(url);
+    $.ajax({
+      url: url,
+      error: function(err) {
+        console.log(err);
+      },
+      success: function(data) {
+        $data = $(data)
+        item = $data.find('item');
+        if (item.length > 0) {
+          console.log('There are some items');
+          $(e.popup._container).find('.community-popup').append('<div class="rssfeed">'
+            + '<div class="title">' + $(item[0]).find('title').text() + '</div>'
+            + '<div class="description">' + $(item[0]).find('description').text() + '</div>');
+        }
+      },
+      timeout: 20000
+    });
+  })
   return widget;
 }

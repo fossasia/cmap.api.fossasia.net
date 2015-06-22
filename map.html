@@ -23,7 +23,7 @@
   <div id="map"></div>
   
   <script type="text/template" class="template" id="community-popup">
-    <div class="community-popup">
+    <div class="community-popup" data-id="<%- props.shortname %>" >
     <% if ( props.name ) { %>
       <h2><a href="<%- props.url %>" target="_window"><%- props.name %></a></h2>
     <% } %>
@@ -60,6 +60,10 @@
       </li>
     <% }); %>
     </ul>
+
+      <iframe class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=oldest-first&limit=1&title=null&disableScroll=true" scrolling="no"></iframe>
+
+      <iframe class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=latest-first&limit=1&until=now&title=null&disableScroll=true" scrolling="no"></iframe>
     </div>
   </script>
   <script type="text/javascript" src="external/leaflet/leaflet.js"></script>
@@ -70,7 +74,7 @@
   <script type="text/javascript" src="community_map.js"></script>
   <script>
     var widget = FFCommunityMapWidget({
-        geoJson: 'http://fossasia.net/map/ffGeoJsonp.php?callback=?',
+        geoJson: 'http://localhost/fossasia/cmap.api.fossasia.net/ffGeoJsonp.php?callback=?',
         scrollByMousewheel : false,
         hideLocationButton: false,
         hideLayerControl: false,

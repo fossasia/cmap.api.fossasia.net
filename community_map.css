@@ -141,3 +141,21 @@ html, body, #map {
     bottom: 30px;
   }
 }
+
+iframe.embed-timeline {
+  margin: 0;
+  padding: 0;
+  border: none;
+  width: 302px;
+  height: 112px;
+}
+.rssfeed {
+  margin: 8px;
+}
+.rssfeed .title {
+  color: #47a3da;
+  font-size: 16px;
+}
+.rssfeed .description {
+  margin-left: 16px;
+}
