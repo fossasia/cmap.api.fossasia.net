@@ -233,7 +233,7 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
   );
   
   widget.map.on('popupopen', function(e){
-    var url = 'http://localhost/fossasia/feed.api.fossasia.net/feed.php?source='
+    var url = 'http://localhost/fossasia/feed.api.fossasia.net/feed.php?limit=3&source='
         + e.popup._contentNode.getElementsByClassName('community-popup')[0].getAttribute('data-id');
     console.log(url);
     $.ajax({
@@ -243,12 +243,15 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
       },
       success: function(data) {
         $data = $(data)
-        item = $data.find('item');
-        if (item.length > 0) {
+        items = $data.find('item');
+        if (items.length > 0) {
           console.log('There are some items');
-          $(e.popup._container).find('.community-popup').append('<div class="rssfeed">'
-            + '<div class="title">' + $(item[0]).find('title').text() + '</div>'
-            + '<div class="description">' + $(item[0]).find('description').text() + '</div>');
+          var rssfeed = $(e.popup._container).find('.community-popup').append('<div class="rssfeed">').find('.rssfeed');
+          rssfeed.append('<label>Recent posts</label>');
+          items.each(function(k, item) {
+            var blogLink = rssfeed.append('<a class="bloglink" target="_blank">' + $(item).find('title').text() + '</a>').find('a').last();
+            blogLink.attr('href', $(item).find('link').text());
+          });
         }
       },
       timeout: 20000

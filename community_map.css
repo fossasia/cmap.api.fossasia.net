@@ -122,6 +122,10 @@ html, body, #map {
  height: 64px;
  
 }
+
+.leaflet-popup-content {
+  width: 551px !important;
+}
 /* /community-popup */
 
 
@@ -146,8 +150,9 @@ iframe.embed-timeline {
   margin: 0;
   padding: 0;
   border: none;
-  width: 302px;
+  width: 272px;
   height: 112px;
+  display: inline-block;
 }
 .rssfeed {
   margin: 8px;
@@ -158,4 +163,8 @@ iframe.embed-timeline {
 }
 .rssfeed .description {
   margin-left: 16px;
+}
+
+.rssfeed .bloglink {
+  display: block;
 }

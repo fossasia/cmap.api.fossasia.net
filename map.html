@@ -60,10 +60,12 @@
       </li>
     <% }); %>
     </ul>
+      <div class="events">
+        <label style="display:block">Recent events</label>
+        <iframe id="latest-event" class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=oldest-first&limit=1&title=null&disableScroll=true" scrolling="no"></iframe>
 
-      <iframe class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=oldest-first&limit=1&title=null&disableScroll=true" scrolling="no"></iframe>
-
-      <iframe class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=latest-first&limit=1&until=now&title=null&disableScroll=true" scrolling="no"></iframe>
+        <iframe id="upcoming-event" class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=latest-first&limit=1&until=now&title=null&disableScroll=true" scrolling="no"></iframe>
+      </div>
     </div>
   </script>
   <script type="text/javascript" src="external/leaflet/leaflet.js"></script>
