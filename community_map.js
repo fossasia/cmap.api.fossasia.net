@@ -262,3 +262,16 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
   });
   return widget;
 }
+
+var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer = window[eventMethod];
+var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+// Listen to message from child window
+eventer(messageEvent,function(e) {
+  if (e.data == ("embed-timeline-loaded")) {
+    var key = e.message ? "message" : "data";
+    var data = e[key];
+    $('.events').removeClass('hidden');
+  }
+},false);
