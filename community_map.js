@@ -251,7 +251,8 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
           var rssfeed = $(e.popup._container).find('.community-popup').append('<div class="rssfeed">').find('.rssfeed');
           rssfeed.append('<label>Recent posts</label>');
           items.each(function(k, item) {
-            var blogLink = rssfeed.append('<a class="bloglink" target="_blank">' + $(item).find('title').text() + '</a>').find('a').last();
+            var blogLink = rssfeed.append('<a class="bloglink" target="_blank">' + $(item).find('title').text() + '</a>'
+              + '<div class="description">' + $(item).find('description').text().substr(0, configs.postContenLimit) + '..</div>').find('a').last();
             blogLink.attr('href', $(item).find('link').text());
           });
         }
