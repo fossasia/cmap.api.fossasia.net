@@ -60,12 +60,12 @@
       </li>
     <% }); %>
     </ul>
-      <div class="events">
-        <label style="display:block">Recent events</label>
-        <iframe id="latest-event" class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=oldest-first&limit=1&title=null&disableScroll=true" scrolling="no"></iframe>
+    <div class="events hidden">
+      <label style="display:block">Recent events</label>
+      <iframe class="embed-timeline" id="upcoming-event" src="<%- props.embedTimelineUrl  %>?source=<%- props.shortname %>&order=oldest-first&limit=1&title=null&disableScroll=true" scrolling="no"></iframe>
 
-        <iframe id="upcoming-event" class="embed-timeline" src="http://localhost/fossasia/timeline.api.fossasia.net/embed.php?source=hassberge&order=latest-first&limit=1&until=now&title=null&disableScroll=true" scrolling="no"></iframe>
-      </div>
+      <iframe class="embed-timeline" id="latest-event" src="<%- props.embedTimelineUrl  %>?source=<%- props.shortname %>&order=latest-first&limit=1&until=now&title=null&disableScroll=true" scrolling="no"></iframe>
+    </div>
     </div>
   </script>
   <script type="text/javascript" src="external/leaflet/leaflet.js"></script>
@@ -75,12 +75,13 @@
   <script type="text/javascript" src="external/underscore/underscore-min.js"></script>
   <script type="text/javascript" src="community_map.js"></script>
   <script>
-    var widget = FFCommunityMapWidget({
-        geoJson: 'http://localhost/fossasia/cmap.api.fossasia.net/ffGeoJsonp.php?callback=?',
-        scrollByMousewheel : false,
-        hideLocationButton: false,
-        hideLayerControl: false,
-        hideInfoBox: true 
+    $.getJSON('config.json', function(configs) {
+      var widget = FFCommunityMapWidget({
+          geoJson: configs.geoJSONUrl,
+          hideLocationButton: false,
+          hideLayerControl: false,
+          hideInfoBox: false
+      });
     });
   </script>
 </body>

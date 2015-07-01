@@ -1,6 +1,6 @@
 var FFCommunityMapWidget = function(settings, map_options, link) {
   
-  var renderPopup = function (props) {
+  var renderPopup = function (props, configs) {
     //console.log(props);
     //clean up values before rendering
     if (props.url && !props.url.match(/^http([s]?):\/\/.*/)) { 
@@ -106,7 +106,7 @@ var FFCommunityMapWidget = function(settings, map_options, link) {
       });
     }
     
-    
+    props.embedTimelineUrl = configs.embedTimelineUrl;
     //render html and return
     return widget.communityTemplate(props);
   };
@@ -180,10 +180,11 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
     }).addTo(widget.map);
   }
   
+  $.getJSON('config.json', function(configs) {
   $.getJSON(options.geoJSONUrl, function(geojson) {
     var geoJsonLayer = L.geoJson(geojson, {
       onEachFeature: function(feature, layer) {
-        layer.bindPopup(options.getPopupHTML(feature.properties), { minWidth: 210 });
+        layer.bindPopup(options.getPopupHTML(feature.properties, configs), { minWidth: 210 });
       },
       filter: function(feature, layer) {
         if (feature.geometry.coordinates[0] && feature.geometry.coordinates[1]) {
@@ -233,7 +234,8 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
   );
   
   widget.map.on('popupopen', function(e){
-    var url = 'http://localhost/fossasia/feed.api.fossasia.net/feed.php?limit=3&source='
+    var url = configs.feedUrl
+        + '?limit=3&source='
         + e.popup._contentNode.getElementsByClassName('community-popup')[0].getAttribute('data-id');
     console.log(url);
     $.ajax({
@@ -256,6 +258,7 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
       },
       timeout: 20000
     });
-  })
+  });
+  });
   return widget;
 }
