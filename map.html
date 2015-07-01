@@ -78,6 +78,7 @@
     $.getJSON('config.json', function(configs) {
       var widget = FFCommunityMapWidget({
           geoJson: configs.geoJSONUrl,
+          scrollByMousewheel : false,
           hideLocationButton: false,
           hideLayerControl: false,
           hideInfoBox: false
