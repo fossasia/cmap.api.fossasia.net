@@ -243,6 +243,7 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
       error: function(err) {
         console.log(err);
       },
+      dataType: "jsonp",
       success: function(data) {
         $data = $(data)
         items = $data.find('item');
