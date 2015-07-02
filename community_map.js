@@ -245,7 +245,7 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
       },
       dataType: "jsonp",
       success: function(data) {
-        $data = $(data)
+        $data = $($.parseXML(data));
         items = $data.find('item');
         if (items.length > 0) {
           console.log('There are some items');
