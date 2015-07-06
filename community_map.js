@@ -1,6 +1,6 @@
 var FFCommunityMapWidget = function(settings, map_options, link) {
   
-  var renderPopup = function (props) {
+  var renderPopup = function (props, configs) {
     //console.log(props);
     //clean up values before rendering
     if (props.url && !props.url.match(/^http([s]?):\/\/.*/)) { 
@@ -106,7 +106,7 @@ var FFCommunityMapWidget = function(settings, map_options, link) {
       });
     }
     
-    
+    props.embedTimelineUrl = configs.embedTimelineUrl;
     //render html and return
     return widget.communityTemplate(props);
   };
@@ -180,10 +180,11 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
     }).addTo(widget.map);
   }
   
+  $.getJSON('config.json', function(configs) {
   $.getJSON(options.geoJSONUrl, function(geojson) {
     var geoJsonLayer = L.geoJson(geojson, {
       onEachFeature: function(feature, layer) {
-        layer.bindPopup(options.getPopupHTML(feature.properties), { minWidth: 210 });
+        layer.bindPopup(options.getPopupHTML(feature.properties, configs), { minWidth: 210 });
       },
       filter: function(feature, layer) {
         if (feature.geometry.coordinates[0] && feature.geometry.coordinates[1]) {
@@ -226,11 +227,54 @@ attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">&copy
     }
   });
   
-  //initialize underscore tamplating
+  //initialize underscore templating
   _.templateSettings.variable = "props";
   widget.communityTemplate = _.template(
     $( "script.template#community-popup" ).html()
   );
   
+  widget.map.on('popupopen', function(e){
+    var url = configs.feedUrl
+        + '?limit=3&source='
+        + e.popup._contentNode.getElementsByClassName('community-popup')[0].getAttribute('data-id');
+    console.log(url);
+    $.ajax({
+      url: url,
+      error: function(err) {
+        console.log(err);
+      },
+      dataType: "jsonp",
+      success: function(data) {
+        $data = $($.parseXML(data));
+        items = $data.find('item');
+        if (items.length > 0) {
+          console.log('There are some items');
+          var rssfeed = $(e.popup._container).find('.community-popup').append('<div class="rssfeed">').find('.rssfeed');
+          rssfeed.append('<label>Recent posts</label>');
+          var rssfeedList = rssfeed.append('<ul>').find('ul');
+          items.each(function(k, item) {
+            var blogLink = rssfeedList.append('<li><a class="bloglink" target="_blank">' + $(item).find('title').text() + '</a>'
+              + '<div class="description">' + $(item).find('description').text().substr(0, configs.postContenLimit) + '..</div></li>').find('a').last();
+            blogLink.attr('href', $(item).find('link').text());
+          });
+        }
+      },
+      timeout: 20000
+    });
+  });
+  });
   return widget;
 }
+
+var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer = window[eventMethod];
+var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+// Listen to message from child window
+eventer(messageEvent,function(e) {
+  if (e.data == ("embed-timeline-loaded")) {
+    var key = e.message ? "message" : "data";
+    var data = e[key];
+    $('.events').removeClass('hidden');
+  }
+},false);

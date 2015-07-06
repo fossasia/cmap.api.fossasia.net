@@ -23,7 +23,7 @@
   <div id="map"></div>
   
   <script type="text/template" class="template" id="community-popup">
-    <div class="community-popup">
+    <div class="community-popup" data-id="<%- props.shortname %>" >
     <% if ( props.name ) { %>
       <h2><a href="<%- props.url %>" target="_window"><%- props.name %></a></h2>
     <% } %>
@@ -60,6 +60,12 @@
       </li>
     <% }); %>
     </ul>
+    <div class="events hidden">
+      <label style="display:block">Recent events</label>
+      <iframe class="embed-timeline" id="upcoming-event" src="<%- props.embedTimelineUrl  %>?source=<%- props.shortname %>&order=oldest-first&limit=1&title=null&disableScroll=true" scrolling="no"></iframe>
+
+      <iframe class="embed-timeline" id="latest-event" src="<%- props.embedTimelineUrl  %>?source=<%- props.shortname %>&order=latest-first&limit=1&until=now&title=null&disableScroll=true" scrolling="no"></iframe>
+    </div>
     </div>
   </script>
   <script type="text/javascript" src="external/leaflet/leaflet.js"></script>
@@ -69,12 +75,14 @@
   <script type="text/javascript" src="external/underscore/underscore-min.js"></script>
   <script type="text/javascript" src="community_map.js"></script>
   <script>
-    var widget = FFCommunityMapWidget({
-        geoJson: 'http://api.fossasia.net/map/ffGeoJsonp.php?callback=?',
-        scrollByMousewheel : false,
-        hideLocationButton: false,
-        hideLayerControl: false,
-        hideInfoBox: true 
+    $.getJSON('config.json', function(configs) {
+      var widget = FFCommunityMapWidget({
+          geoJson: configs.geoJSONUrl,
+          scrollByMousewheel : true,
+          hideLocationButton: false,
+          hideLayerControl: false,
+          hideInfoBox: false
+      });
     });
   </script>
 </body>
