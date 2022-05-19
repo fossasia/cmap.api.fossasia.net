@@ -9,14 +9,17 @@ Community Map
 ```
 git clone https://github.com/fossasia/cmap.api.fossasia.net.git
 cd cmap.api.fossasia.net
+yarn install
+cp config.json.sample config.json
+# maybe edit your config.json
 node server.js
 ```
 
 ## Dependencies
 (external folder)
 
-* jQuery v2.0.3
-* underscore.js v1.5.2
+* jQuery
+* underscore.js
 * leaflet.js
 
 ## Contribute
